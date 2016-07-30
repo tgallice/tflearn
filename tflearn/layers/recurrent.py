@@ -89,7 +89,11 @@ def _rnn_template(incoming, cell, dropout=None, return_seq=False,
         o = outputs if return_seq else outputs[-1]
 
     # Track output tensor.
-    tf.add_to_collection(tf.GraphKeys.LAYER_TENSOR + '/' + name, o)
+    graph_layer_name = tf.GraphKeys.LAYER_TENSOR + '/' + name
+    if hasattr(o, 'name'):
+        tf.add_to_collection(graph_layer_name, o)
+    else:
+        tf.add_to_collection(graph_layer_name, tf.identity(o))
 
     return (o, state) if return_state else o
 
@@ -397,7 +401,11 @@ def bidirectional_rnn(incoming, rnncell_fw, rnncell_bw, return_seq=False,
     sbw = states_fw
 
     # Track output tensor.
-    tf.add_to_collection(tf.GraphKeys.LAYER_TENSOR + '/' + name, o)
+    graph_layer_name = tf.GraphKeys.LAYER_TENSOR + '/' + name
+    if hasattr(o, 'name'):
+        tf.add_to_collection(graph_layer_name, o)
+    else:
+        tf.add_to_collection(graph_layer_name, tf.identity(o))
 
     return (o, sfw, sbw) if return_states else o
 

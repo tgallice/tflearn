@@ -199,7 +199,7 @@ class Trainer(object):
         print("Run id: " + run_id)
         print("Log directory: " + self.tensorboard_dir)
 
-        original_train_ops = list(self.train_ops)
+        original_train_ops = to_list(self.train_ops)
         # Remove excluded train_ops
         for t in self.train_ops:
             if excl_trainops and t in excl_trainops:
